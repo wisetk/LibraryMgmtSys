@@ -1,0 +1,46 @@
+﻿@page "/books"
+@using LibraryMgmtSys.Models
+@using LibraryMgmtSys.Services
+@inject NavigationManager Nav
+@inject IAPIService API
+@rendermode InteractiveServer
+
+<PageTitle>Books</PageTitle>
+
+<button @onclick="NewBook">Create Book</button>
+
+<table>
+    <tr>
+        <th>Book ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Total Copies</th>
+        <th>Available Copies</th>
+    </tr>
+    @foreach (var book in books)
+    {
+        <tr>
+            <th>@book.id</th>
+            <th>@book.title</th>
+            <th>@book.author</th>
+            <th>@book.genre</th>
+            <th>@book.totalCopies</th>
+            <th>@book.availableCopies</th>
+        </tr>
+    }
+</table>
+
+@code {
+    private List<Book> books = new List<Book>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await API.GetBooksAsync();
+    }
+
+    private void NewBook()
+    {
+        Nav.NavigateTo("/create_book");
+    }
+}

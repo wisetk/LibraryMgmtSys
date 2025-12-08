@@ -1,0 +1,44 @@
+﻿@page "/create_book"
+@using LibraryMgmtSys.Models
+@using LibraryMgmtSys.Services
+@inject NavigationManager Nav
+@inject IAPIService API
+@rendermode InteractiveServer
+
+<PageTitle>Create Book</PageTitle>
+
+<!-- Form for gathering information on new book -->
+<form @onsubmit="HandleSubmit">
+    <label for="title">Title:</label>
+    <input id="title" type="text" @bind="book.title"/>
+
+    <label for="author">Author:</label>
+    <input id="author" type="text" @bind="book.author"/>
+
+    <label for="genre">Genre:</label>
+    <input id="genre" type="text" @bind="book.genre"/>
+
+    <label for="total_copies">Total Copies:</label>
+    <input id="total_copies" type="number" @bind="book.totalCopies"/>
+
+    <input type="submit" value="Submit"/>
+</form>
+
+@code {
+    private Book book = new Book();
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            book.id = 1; // HANDLE AUTOMATIC ID ASSIGNMENT, THE 1 IS A PLACEHOLDER
+            book.availableCopies = book.totalCopies;
+            await API.CreateBookAsync(book);
+            Nav.NavigateTo("/books");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.Error.WriteLine($"Error: {e.Message}");
+        }
+    }
+}

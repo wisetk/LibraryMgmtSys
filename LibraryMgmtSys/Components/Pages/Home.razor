@@ -1,0 +1,26 @@
+﻿@page "/"
+@using LibraryMgmtSys.Models
+@using LibraryMgmtSys.Services
+@inject NavigationManager Nav
+@inject IAPIService API
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<h1>Library Management System</h1>
+
+<p>Welcome to the library management system (LMS). </p> <!--ADD MORE TO THE INTRO PAGE-->
+
+@code {
+    private List<Book> books { get; set; } = new List<Book>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await API.GetBooksAsync();
+    }
+
+    private void NewBook()
+    {
+        Nav.NavigateTo("/create_book");
+    }
+}
