@@ -9,7 +9,7 @@ namespace LibraryMgmtSys.Services
         public APIService()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:8000/");
+            _httpClient.BaseAddress = new Uri("http://127.0.0.1:8000/"); // REVERT TO LOCALHOST IF NOT WORKING
         }
 
         // ************* Book Endpoints *************
@@ -33,14 +33,18 @@ namespace LibraryMgmtSys.Services
         /// <returns>List of books</returns>
         public async Task<List<Book>> GetBooksAsync(string? title = null)
         {
+            List<Book> books = new List<Book>();
+
             if (title != null)
             {
-                return await _httpClient.GetFromJsonAsync<List<Book>>($"books/?title={title}");
+                books = await _httpClient.GetFromJsonAsync<List<Book>>($"/books/{title}");
             }
             else
             {
-                return await _httpClient.GetFromJsonAsync<List<Book>>("books/");
+                books = await _httpClient.GetFromJsonAsync<List<Book>>("/books");
             }
+
+            return books;
         }
 
         /// <summary>

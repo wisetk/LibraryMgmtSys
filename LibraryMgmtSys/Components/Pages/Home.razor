@@ -9,18 +9,17 @@
 
 <h1>Library Management System</h1>
 
-<p>Welcome to the library management system (LMS). </p> <!--ADD MORE TO THE INTRO PAGE-->
+<p>Welcome to the library management system (LMS). To view book, user, and checkout information select the appropriate option on the right-hand side.</p> 
+
+<h2>Book Page</h2>
+<p>The book page by default shows a list of all books currently in the system. To search for a specific book, a search bar is provided at the top to search for specific titles.</p>
+
+<h2>User Page</h2>
+<p></p>
+
+<h2>Checkout Page</h2>
+<p></p>
 
 @code {
-    private List<Book> books { get; set; } = new List<Book>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        books = await API.GetBooksAsync();
-    }
-
-    private void NewBook()
-    {
-        Nav.NavigateTo("/create_book");
-    }
+    // Include navigation stuff? or just let side bar do it
 }
