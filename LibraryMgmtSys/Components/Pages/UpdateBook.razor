@@ -1,0 +1,49 @@
+﻿@page "/update_book/{bookId:int}"
+@using LibraryMgmtSys.Models
+@using LibraryMgmtSys.Services
+@inject NavigationManager Nav
+@inject IAPIService API
+@rendermode InteractiveServer
+
+<PageTitle>Update Book</PageTitle>
+
+@if (targetBook == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <form @onsubmit="UpdateBookAsync">
+        <label for="title">Title:</label>
+        <input id="title" type="text" @bind="targetBook.title" />
+
+        <label for="author">Author:</label>
+        <input id="author" type="text" @bind="targetBook.author" />
+
+        <label for="genre">Genre:</label>
+        <input id="genre" type="text" @bind="targetBook.genre" />
+
+        <label for="total_copies">Total Copies:</label>
+        <input id="total_copies" type="number" @bind="targetBook.totalCopies" />
+
+        <input type="submit" value="Submit" />
+    </form>
+}
+
+@code {
+    [Parameter]
+    public int bookId { get; set; }
+
+    private Book targetBook { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        targetBook = await API.GetBookByIdAsync(bookId);
+    }
+
+    private async Task UpdateBookAsync()
+    {
+        await API.UpdateBookAsync(targetBook);
+        Nav.NavigateTo("/books");
+    }
+}

@@ -47,6 +47,15 @@ namespace LibraryMgmtSys.Services
             return books;
         }
 
+        public async Task<Book> GetBookByIdAsync(int id)
+        {
+            Book book = new Book();
+
+            book = await _httpClient.GetFromJsonAsync<Book>($"/books/id/{id}");
+
+            return book;
+        }
+
         /// <summary>
         /// Calls API to patch a book record
         /// </summary>

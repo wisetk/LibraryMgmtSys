@@ -6,6 +6,7 @@ namespace LibraryMgmtSys.Services
         // Book Endpoints
         Task<string> CreateBookAsync(Book book);
         Task<List<Book>> GetBooksAsync(string? title = null);
+        Task<Book> GetBookByIdAsync(int id);
         Task<string> UpdateBookAsync(Book book);
         Task<string> DeleteBookAsync(int id);
 

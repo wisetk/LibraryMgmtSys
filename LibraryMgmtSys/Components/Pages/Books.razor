@@ -9,6 +9,10 @@
 
 <button @onclick="NewBook">Create Book</button>
 
+<label for="search-term">Search Titles:</label>
+<input id="search-term" type="text" @bind="searchTerm"/>
+<button @onclick="UpdateResults">Search</button>
+
 <table>
     <tr>
         <th>Book ID</th>
@@ -21,18 +25,24 @@
     @foreach (var book in books)
     {
         <tr>
-            <th>@book.id</th>
-            <th>@book.title</th>
-            <th>@book.author</th>
-            <th>@book.genre</th>
-            <th>@book.totalCopies</th>
-            <th>@book.availableCopies</th>
+            <td>@book.id</td>
+            <td>@book.title</td>
+            <td>@book.author</td>
+            <td>@book.genre</td>
+            <td>@book.totalCopies</td>
+            <td>@book.availableCopies</td>
+            <td>
+                <button @onclick="() => EditBook(book.id)">Edit</button>
+                <button @onclick="() => DeleteBook(book)">Delete</button>
+            </td>
         </tr>
     }
 </table>
 
 @code {
     private List<Book> books = new List<Book>();
+
+    private string searchTerm { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,4 +53,21 @@
     {
         Nav.NavigateTo("/create_book");
     }
+
+    private void EditBook(int id)
+    {
+        Nav.NavigateTo($"/update_book/{id}");
+    }
+
+    private async void DeleteBook(Book book)
+    {
+        await API.DeleteBookAsync(book.id);
+    }
+
+    private async Task UpdateResults()
+    {
+        books = await API.GetBooksAsync(searchTerm);
+    }
+
+    
 }
