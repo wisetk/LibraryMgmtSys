@@ -26,11 +26,5 @@ namespace LibraryMgmtSys.Models
         /// </summary>
         [JsonPropertyName("checkout_date")]
         public string checkoutDate { get; set; }
-
-        /// <summary>
-        /// Expected return date
-        /// </summary>
-        [JsonPropertyName("return_date")]
-        public string returnDate { get; set; }  
     }
 }

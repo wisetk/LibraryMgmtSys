@@ -57,7 +57,6 @@
             checkout.id = 1; // Unique ID assigned by API, this is a placeholder
             FormatDate();
             checkout.checkoutDate = fullDate;
-            checkout.returnDate = "";
             await API.CreateCheckoutAsync(checkout);
             Nav.NavigateTo("/checkouts");
         }
