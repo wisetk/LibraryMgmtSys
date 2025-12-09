@@ -1,0 +1,37 @@
+﻿@page "/create_user"
+@using LibraryMgmtSys.Models
+@using LibraryMgmtSys.Services
+@inject NavigationManager Nav
+@inject IAPIService API
+@rendermode InteractiveServer
+
+<PageTitle>Create User</PageTitle>
+
+<!--Form prompting for new user information-->
+<form @onsubmit="HandleSubmit">
+    <label for="username">Username:</label>
+    <input id="username" type="text" @bind="user.username"/>
+
+    <label for="role">Role:</label>
+    <input id="role" type="text" @bind="user.role"/>
+
+    <input type="submit" value="Submit"/>
+</form>
+
+@code {
+    private User user = new User();
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            user.id = 1; // Unique ID assigned by API, this is a placeholder
+            await API.CreateUserAsync(user);
+            Nav.NavigateTo("/users");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.Error.WriteLine($"Error: {e.Message}");
+        }
+    }
+}

@@ -7,7 +7,11 @@
 
 <PageTitle>Users</PageTitle>
 
-<button>Create User</button>
+<button @onclick="NewUser">Create User</button>
+
+<label for="search-term">Search Users:</label>
+<input id="search-term" type="text" @bind="searchTerm" />
+<button @onclick="UpdateResults">Search</button>
 
 <table>
     <tr>
@@ -21,6 +25,10 @@
             <td>@user.id</td>
             <td>@user.username</td>
             <td>@user.role</td>
+            <td>
+                <button @onclick="() => EditUser(user.id)">Edit</button>
+                <button @onclick="() => DeleteUser(user)">Delete</button>
+            </td>
         </tr>
     }
 </table>
@@ -28,8 +36,31 @@
 @code {
     private List<User> users = new List<User>();
 
+    private string? searchTerm { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         users = await API.GetUsersAsync();
+    }
+
+    private void NewUser()
+    {
+        Nav.NavigateTo("/create_user");
+    }
+
+    private void EditUser(int id)
+    {
+        Nav.NavigateTo($"/update_user/{id}");
+    }
+
+    private async Task DeleteUser(User user)
+    {
+        await API.DeleteUserAsync(user.id);
+        users.Remove(user);
+    }
+
+    private async Task UpdateResults()
+    {
+        users = await API.GetUsersAsync(searchTerm);
     }
 }

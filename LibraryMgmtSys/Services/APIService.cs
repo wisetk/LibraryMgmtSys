@@ -47,6 +47,11 @@ namespace LibraryMgmtSys.Services
             return books;
         }
 
+        /// <summary>
+        /// Get book record by searching by corresponding ID number
+        /// </summary>
+        /// <param name="id">Book record being searched for</param>
+        /// <returns>Book record</returns>
         public async Task<Book> GetBookByIdAsync(int id)
         {
             Book book = new Book();
@@ -101,14 +106,32 @@ namespace LibraryMgmtSys.Services
         /// <returns>List of users</returns>
         public async Task<List<User>> GetUsersAsync(string? username = null)
         {
-            if (username != null)
+            List<User> users = new List<User>();
+            
+            if (username != null && username != "")
             {
-                return await _httpClient.GetFromJsonAsync<List<User>>($"users/?username={username}");
+                users = await _httpClient.GetFromJsonAsync<List<User>>($"/users/username/{username}");
             }
             else
             {
-                return await _httpClient.GetFromJsonAsync<List<User>>("users/");
+                users = await _httpClient.GetFromJsonAsync<List<User>>("/users"); // FLIPPED SLASH FROM BACK TO FRONT IF THIS BREAKS
             }
+
+            return users;
+        }
+
+        /// <summary>
+        /// Get the user record corresponding to a user ID
+        /// </summary>
+        /// <param name="id">User ID of user record being searched for</param>
+        /// <returns>User record</returns>
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            User user = new User();
+
+            user = await _httpClient.GetFromJsonAsync<User>($"/users/id/{id}");
+
+            return user;
         }
 
         /// <summary>
@@ -149,10 +172,12 @@ namespace LibraryMgmtSys.Services
             return await response.Content.ReadAsStringAsync();
         }
 
-        //public async Task<string> ReturnCheckoutAsync(int id) // SHOULD BE CHANGED TO PATCH? OR CHANGED TO HAVE FULL JSON SENT?
-        //{
-            //var response = await _httpClient.PostAsJsonAsync("checkouts/")
-        //}
+        public async Task<string> ReturnCheckoutAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"checkouts/return/{id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
 
         /// <summary>
         /// Calls API to get a checkout record by ID number
@@ -165,12 +190,34 @@ namespace LibraryMgmtSys.Services
         }
 
         /// <summary>
+        /// Calls API to get list of checkouts by user ID
+        /// </summary>
+        /// <param name="id">User ID being searched for</param>
+        /// <returns>List of checkouts by user ID</returns>
+        public async Task<List<Checkout>> GetCheckoutsByUserId(int id)
+        {
+            return await _httpClient.GetFromJsonAsync<List<Checkout>>($"checkouts/user/{id}");
+        }
+
+        /// <summary>
+        /// Calls API to get list of checkouts by book ID
+        /// </summary>
+        /// <param name="id">Book ID being searched for</param>
+        /// <returns>List of checkouts by book ID</returns>
+        public async Task<List<Checkout>> GetCheckoutsByBookId(int id)
+        {
+            return await _httpClient.GetFromJsonAsync<List<Checkout>>($"checkouts/book/{id}");
+        }
+
+        /// <summary>
         /// Calls API to get a list of checkout records
         /// </summary>
         /// <returns>List of checkouts</returns>
         public async Task<List<Checkout>> GetCheckoutsAsync()
         {
-            return await _httpClient.GetFromJsonAsync<List<Checkout>>("checkouts/");
+            List<Checkout> checkouts = new List<Checkout>();
+            checkouts =  await _httpClient.GetFromJsonAsync<List<Checkout>>($"checkouts/");
+            return checkouts;
         }
     }
 }

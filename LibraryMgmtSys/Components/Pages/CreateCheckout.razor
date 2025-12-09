@@ -1,0 +1,74 @@
+﻿@page "/create_checkout"
+@using LibraryMgmtSys.Models
+@using LibraryMgmtSys.Services
+@inject NavigationManager Nav
+@inject IAPIService API
+@rendermode InteractiveServer
+
+<PageTitle>Create Checkout</PageTitle>
+
+<!--Form for entering new checkout information-->
+<form @onsubmit="HandleSubmit">
+    <label for="user_id">User ID:</label>
+    <input id="user_id" type="text" @bind="checkout.userId"/>
+
+    <label for="book_id">Book ID:</label>
+    <input id="book_id" type="text" @bind="checkout.bookId"/>
+
+    <label for="checkout_month">Checkout Month:</label>
+    <select id="checkout_month" @bind="month">
+        <option> </option>
+        <option>Jan</option>
+        <option>Feb</option>
+        <option>Mar</option>
+        <option>Apr</option>
+        <option>May</option>
+        <option>Jun</option>
+        <option>Jul</option>
+        <option>Aug</option>
+        <option>Sep</option>
+        <option>Oct</option>
+        <option>Nov</option>
+        <option>Dec</option>
+    </select>
+
+    <label for="checkout_day">Checkout Day:</label>
+    <input id="checkout_day" type="number" @bind="day"/>
+
+    <label for="checkout_year">Checkout Year:</label>
+    <input id="checkout_year" type="number" @bind="year"/>
+
+    <input type="submit" value="Submit"/>
+</form>
+
+@code {
+    private Checkout checkout = new Checkout();
+
+    private string month { get; set; }
+    private string day { get; set; }
+    private string year { get; set; }
+
+    private string fullDate { get; set; }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            checkout.id = 1; // Unique ID assigned by API, this is a placeholder
+            FormatDate();
+            checkout.checkoutDate = fullDate;
+            checkout.returnDate = "";
+            await API.CreateCheckoutAsync(checkout);
+            Nav.NavigateTo("/checkouts");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.Error.WriteLine($"Error: {e.Message}");
+        }
+    }
+
+    private void FormatDate()
+    {
+        fullDate = $"{day}-{month}-{year}";
+    }
+}

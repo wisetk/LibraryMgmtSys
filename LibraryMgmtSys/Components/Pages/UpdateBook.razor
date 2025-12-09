@@ -15,16 +15,19 @@ else
 {
     <form @onsubmit="UpdateBookAsync">
         <label for="title">Title:</label>
-        <input id="title" type="text" @bind="targetBook.title" />
+        <input id="title" type="text" @bind="targetBook.title"/>
 
         <label for="author">Author:</label>
-        <input id="author" type="text" @bind="targetBook.author" />
+        <input id="author" type="text" @bind="targetBook.author"/>
 
         <label for="genre">Genre:</label>
-        <input id="genre" type="text" @bind="targetBook.genre" />
+        <input id="genre" type="text" @bind="targetBook.genre"/>
 
         <label for="total_copies">Total Copies:</label>
-        <input id="total_copies" type="number" @bind="targetBook.totalCopies" />
+        <input id="total_copies" type="number" @bind="targetBook.totalCopies"/>
+
+        <label for="available_copies">Available Copies:</label>
+        <input id="available_copies" type="number" @bind="targetBook.availableCopies"/>
 
         <input type="submit" value="Submit" />
     </form>

@@ -1,0 +1,43 @@
+﻿@page "/update_user/{userId:int}"
+@using LibraryMgmtSys.Models
+@using LibraryMgmtSys.Services
+@inject NavigationManager Nav
+@inject IAPIService API
+@rendermode InteractiveServer
+
+<PageTitle>Update User</PageTitle>
+
+@if (targetUser == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <form @onsubmit="UpdateUserAsync">
+        <label for="username">Username:</label>
+        <input id="username" type="text" @bind="targetUser.username"/>
+
+        <label for="role">Role:</label>
+        <input id="role" type="text" @bind="targetUser.role"/>
+
+        <input type="submit" value="Submit" />
+    </form>
+}
+
+@code {
+    [Parameter]
+    public int userId { get; set; }
+
+    private User targetUser { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        targetUser = await API.GetUserByIdAsync(userId);
+    }
+
+    private async Task UpdateUserAsync()
+    {
+        await API.UpdateUserAsync(targetUser);
+        Nav.NavigateTo("/users");
+    }
+}

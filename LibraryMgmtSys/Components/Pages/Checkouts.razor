@@ -7,8 +7,47 @@
 
 <PageTitle>Checkouts</PageTitle>
 
+<button @onclick="NewCheckout">Create Checkout</button>
 
+<table>
+    <tr>
+        <th>Checkout ID</th>
+        <th>User ID</th>
+        <th>Book ID</th>
+        <th>Checkout Date</th>
+        <th>Return Date</th>
+    </tr>
+    @foreach (var checkout in checkouts)
+    {
+        <tr>
+            <td>@checkout.id</td>
+            <td>@checkout.userId</td>
+            <td>@checkout.bookId</td>
+            <td>@checkout.checkoutDate</td>
+            <td>@checkout.returnDate</td>
+            <td>
+                <button @onclick="() => ReturnCheckout(checkout)">Return</button>
+            </td>
+        </tr>
+    }
+</table>
 
 @code {
+    private List<Checkout> checkouts = new List<Checkout>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        checkouts = await API.GetCheckoutsAsync();
+    }
+
+    private void NewCheckout()
+    {
+        Nav.NavigateTo("/create_checkout");
+    }
+
+    private async Task ReturnCheckout(Checkout checkout)
+    {
+        await API.ReturnCheckoutAsync(checkout.id);
+        checkouts.Remove(checkout);
+    }
 }

@@ -59,15 +59,14 @@
         Nav.NavigateTo($"/update_book/{id}");
     }
 
-    private async void DeleteBook(Book book)
+    private async Task DeleteBook(Book book)
     {
         await API.DeleteBookAsync(book.id);
+        books.Remove(book);
     }
 
     private async Task UpdateResults()
     {
         books = await API.GetBooksAsync(searchTerm);
-    }
-
-    
+    } 
 }

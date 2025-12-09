@@ -31,7 +31,7 @@
     {
         try
         {
-            book.id = 1; // HANDLE AUTOMATIC ID ASSIGNMENT, THE 1 IS A PLACEHOLDER
+            book.id = 1; // Unique ID assigned by API, this is a placeholder
             book.availableCopies = book.totalCopies;
             await API.CreateBookAsync(book);
             Nav.NavigateTo("/books");
